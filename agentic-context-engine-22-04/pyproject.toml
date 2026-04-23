@@ -1,0 +1,210 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ace-framework"
+version = "0.10.0"
+description = "Build self-improving AI agents that learn from experience"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Kayba.ai", email = "hello@kayba.ai"},
+]
+maintainers = [
+    {name = "Kayba.ai", email = "hello@kayba.ai"},
+]
+keywords = [
+    "ai",
+    "llm",
+    "agents",
+    "machine-learning",
+    "self-improvement",
+    "context-engineering",
+    "ace",
+    "openai",
+    "anthropic",
+    "claude",
+    "gpt",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "click>=8.1.0",
+    "litellm>=1.83.0",
+    "pydantic>=2.0.0",
+    "pydantic-ai-slim[litellm]>=0.0.36",
+    "python-toon>=0.1.0",
+    "tau2",
+    "tenacity>=9.1.4",
+]
+
+[project.optional-dependencies]
+claude-sdk = [
+    "anthropic>=0.76.0",
+]
+claude-code = [
+    "python-dotenv>=1.0.0",
+    "tenacity>=8.0.0",
+]
+instructor = [
+    "instructor>=1.0.0",
+]
+deduplication = [
+    "numpy>=1.24.0",
+    "sentence-transformers>=2.2.0",
+]
+browser-use = [
+    "browser-use>=0.9.0",
+]
+logfire = [
+    "logfire[pydantic-ai]>=3.0.0",
+]
+tracing = [
+    "kayba-tracing>=0.9.4",
+]
+bedrock = [
+    "boto3>=1.42.50",
+]
+langchain = [
+    "langchain-openai>=0.3.35",
+    "langchain-anthropic>=0.3.0",
+    "langchain-litellm>=0.2.0",
+    "langgraph>=0.2.0",
+]
+transformers = [
+    "transformers>=4.30.0",
+    "torch>=2.0.0",
+    "accelerate>=0.20.0",
+]
+all = [
+    "python-dotenv>=1.0.0",
+    "tenacity>=8.0.0",
+    "instructor>=1.0.0",
+    "boto3>=1.42.50",
+    "numpy>=1.24.0",
+    "sentence-transformers>=2.2.0",
+    "browser-use>=0.9.0",
+    "langchain-openai>=0.3.35",
+    "langchain-anthropic>=0.3.0",
+    "langchain-litellm>=0.2.0",
+    "langgraph>=0.2.0",
+    "transformers>=4.30.0",
+    "torch>=2.0.0",
+    "accelerate>=0.20.0",
+    "kayba-tracing>=0.9.4",
+    "requests>=2.31.0",
+]
+cloud = [
+    "requests>=2.31.0",
+    "questionary>=2.0.0",
+]
+mcp = [
+    "mcp>=1.22.0",
+    "pydantic-settings>=2.0.0",
+    "tenacity>=8.0.0",
+]
+
+[project.scripts]
+ace = "ace.cli.setup:main"
+kayba = "ace.cli:main"
+ace-mcp = "ace.integrations.mcp.server:main"
+
+[project.urls]
+Homepage = "https://kayba.ai"
+Documentation = "https://github.com/Kayba-ai/agentic-context-engine#readme"
+Repository = "https://github.com/Kayba-ai/agentic-context-engine"
+Issues = "https://github.com/Kayba-ai/agentic-context-engine/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "git-changelog>=2.5.0",
+    "boto3>=1.42.50",
+    "types-requests>=2.32.4.20260107",
+]
+tau-bench = [
+    "tau2 @ git+https://github.com/sierra-research/tau2-bench.git@dev/tau3",
+]
+demos = [
+    "browser-use>=0.9.0",
+    "rich>=13.0.0",
+    "datasets>=2.0.0",
+    "pyyaml>=6.0.0",
+    "pandas>=2.0.0",
+    "openpyxl>=3.0.0",
+    "playwright>=1.40.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["ace", "ace.*", "pipeline", "pipeline.*"]
+
+[tool.setuptools.package-data]
+ace = ["py.typed", "**/*.md"]
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+files = ["ace"]
+exclude = [
+    "^tests/",
+    "^examples/",
+    "^scripts/",
+    "^benchmarks/",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=ace",
+    "--cov=pipeline",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-fail-under=25",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "requires_api: marks tests that need live API credentials",
+]
+
+[tool.uv.sources]
+tau2 = { git = "https://github.com/sierra-research/tau2-bench.git", branch = "dev/tau3" }
+kayba-tracing = { path = "sdk/python", editable = true }

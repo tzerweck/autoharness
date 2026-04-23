@@ -1,0 +1,87 @@
+[experiment]
+name = "simple-pytest-agent"
+workspace_root = "."
+stack = "python"
+max_iterations = 10
+
+[proposer]
+backend = "command"
+max_turns = 50
+command = ["your-agent-cli", "run"]
+
+[runner]
+kind = "pytest"
+project_root = "."
+
+[runner.pytest]
+pytest_args = ["-q"]
+
+[policy]
+primary_metric = "pass_rate"
+holdout_every = 3
+require_holdout_for_promotion = true
+prefer_simpler_on_tie = true
+
+[validation]
+kind = "python_import"
+entrypoint = "agent:build_agent"
+timeout_sec = 30.0
+
+[context]
+history_strategy = "recent_plus_best"
+max_candidates = 8
+include_diffs = true
+include_train_traces = true
+include_holdout_details = false
+
+[reporting]
+emit_markdown = true
+emit_json = true
+
+[surfaces.agent_entry]
+kind = "workspace_file"
+target = "agent.py"
+filename = "agent.py"
+base_file = "agent.py"
+
+[surfaces.prompt]
+kind = "workspace_file"
+target = "prompt.md"
+filename = "prompt.md"
+base_file = "prompt.md"
+
+[surfaces.tools]
+kind = "workspace_file"
+target = "tools.py"
+filename = "tools.py"
+base_file = "tools.py"
+
+[[cases]]
+id = "train.math_tool"
+runner_ref = "tests/evals/test_agent.py::test_choose_math_tool"
+split = "train"
+stratum = "tool_selection"
+
+[[cases]]
+id = "train.solve_math"
+runner_ref = "tests/evals/test_agent.py::test_solve_math_task"
+split = "train"
+stratum = "tool_execution"
+
+[[cases]]
+id = "train.solve_multiply"
+runner_ref = "tests/evals/test_agent.py::test_solve_multiply_task"
+split = "train"
+stratum = "tool_execution"
+
+[[cases]]
+id = "holdout.solve_search"
+runner_ref = "tests/evals/test_agent.py::test_solve_search_task"
+split = "holdout"
+stratum = "tool_execution"
+
+[[cases]]
+id = "scorecard.search_tool"
+runner_ref = "tests/evals/test_agent.py::test_choose_search_tool"
+split = "scorecard"
+stratum = "tool_selection"

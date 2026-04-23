@@ -1,0 +1,116 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project specific
+*.pdf
+*.png
+!benchmarks/tasks/tau_bench/*.png
+!examples/browser-use/**/*.png
+!assets/*.png
+ACE_IMPROVEMENTS.md
+ACE_ROADMAP.md
+DEMO_TODO.md
+*.egg-info/
+reports/
+docs/method_outline.md
+logs/
+
+# Generated skillbook and result files
+*_skillbook.json
+ace_domain_skillbook.json
+kayba_learned.json
+kayba_test_skillbook.json
+my_agent.json
+my_trained_agent.json
+*.log
+
+# Checkpoint files (generated during training)
+**/checkpoints/*.json
+*_checkpoint_*.json
+*_latest.json
+evaluation_results/*.json
+
+# Benchmark data and cache
+benchmark_results/
+benchmark_cache/
+tau_benchmark_results/
+results/
+appworld_data/
+*.arrow
+*.parquet
+huggingface_cache/
+
+# MkDocs build output
+site/
+
+# Sensitive/private data (NEVER commit!)
+.private/
+
+# GSD planning artifacts (NEVER commit!)
+.planning/

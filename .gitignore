@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.codex
+.autoharness/
+*.egg-info/
+examples/**/runs/
+examples/**/replays/
+agentic-context-engine-22-04.backup_with_meta_harness/
+agentic-context-engine-22-04/mlflow.db

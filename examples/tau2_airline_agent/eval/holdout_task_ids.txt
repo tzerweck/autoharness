@@ -1,0 +1,7 @@
+# First-pass curated tau2 airline holdout split.
+# Built from the upstream tau2 "test" split and kept disjoint from scorecard.
+2
+8
+13
+18
+24

@@ -1,0 +1,11 @@
+"""Base validation result types."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class ValidationResult:
+    ok: bool
+    message: str

@@ -1,0 +1,41 @@
+[experiment]
+name = "template-agent"
+workspace_root = "."
+stack = "python"
+max_iterations = 10
+
+[proposer]
+backend = "command"
+max_turns = 50
+command = ["your-agent-cli", "run"]
+
+[runner]
+kind = "pytest"
+project_root = "."
+
+[validation]
+kind = "python_import"
+entrypoint = "agent:build_agent"
+
+[surfaces.agent_entry]
+kind = "workspace_file"
+target = "agent.py"
+filename = "agent.py"
+base_file = "agent.py"
+
+[surfaces.prompt]
+kind = "workspace_file"
+target = "prompt.md"
+filename = "prompt.md"
+base_file = "prompt.md"
+
+[surfaces.tools]
+kind = "workspace_file"
+target = "tools.py"
+filename = "tools.py"
+base_file = "tools.py"
+
+[[cases]]
+id = "train.placeholder"
+runner_ref = "tests/evals/test_agent.py::test_placeholder"
+split = "train"

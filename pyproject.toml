@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autoharnessengineering"
+version = "0.1.0"
+description = "A framework for evolving agent harnesses through iterative evaluation."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "AutoHarness Engineering" }
+]
+license = { text = "MIT" }
+dependencies = [
+  "pydantic>=2.13,<3",
+  "pytest>=9,<10",
+]
+
+[project.scripts]
+autoharness = "autoharness.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["autoharness"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

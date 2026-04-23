@@ -1,0 +1,13 @@
+# First-pass curated tau2 airline train split.
+# Built from the upstream tau2 "train" split with a mix of booking, change,
+# baggage, compensation, passenger-update, and policy-denial tasks.
+0
+3
+4
+10
+12
+20
+27
+33
+40
+46

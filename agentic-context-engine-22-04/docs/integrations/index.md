@@ -1,0 +1,86 @@
+# Integrations Overview
+
+ACE provides both runners and step-based integrations for popular agentic
+frameworks. Some integrations are full runners, while others are composable
+pipeline steps you can drop into a custom `Pipeline`.
+
+## Available Integrations
+
+| Runner | Framework | Input | Insight Level |
+|--------|-----------|-------|--------------|
+| [`ACELiteLLM`](litellm.md) | LiteLLM (100+ providers) | Questions | Micro |
+| [`LangChain`](langchain.md) | LangChain Runnables | Chain inputs | Meso |
+| [`BrowserUse`](browser-use.md) | browser-use | Task strings | Meso |
+| [`ClaudeCode`](claude-code.md) | Claude Code CLI | Task strings | Meso |
+| [`Claude SDK`](claude-sdk.md) | Anthropic Python SDK | Task strings or `ACESample` | Meso |
+| [OpenClaw](openclaw.md) | OpenClaw transcripts | JSONL trace files | Meso |
+| [MCP Server](mcp.md) | MCP (stdio) | Tool calls | Micro |
+| [MCP Client Setup](mcp-client-setup.md) | Claude Code, Cursor, Windsurf | — | Setup Guide |
+| [Opik](opik.md) | Opik observability | — | Monitoring |
+| [Tracing](tracing.md) | Kayba tracing SDK | `@trace` / `start_span` | Cloud |
+| [Hosted API](hosted-api.md) | Kayba hosted API | Trace files | Cloud |
+
+## The Pattern
+
+All integration runners follow the same three-step pattern:
+
+```
+1. INJECT   — Add skillbook strategies to the agent's context
+2. EXECUTE  — Run the external agent normally
+3. LEARN    — Reflector + SkillManager update the skillbook
+```
+
+## Quick Construction
+
+Every runner offers a `from_model()` factory that builds ACE roles automatically:
+
+```python
+from ace import BrowserUse, LangChain, ClaudeCode
+
+# Browser automation
+browser = BrowserUse.from_model(browser_llm=my_llm, ace_model="gpt-4o-mini")
+
+# LangChain chain/agent
+chain = LangChain.from_model(my_runnable, ace_model="gpt-4o-mini")
+
+# Claude Code CLI
+coder = ClaudeCode.from_model(working_dir="./project", ace_model="gpt-4o-mini")
+```
+
+For direct Anthropic API usage without a runner, compose the SDK steps directly:
+
+```python
+from ace import Pipeline, Reflector, SkillManager, Skillbook, learning_tail
+from ace.integrations import ClaudeSDKExecuteStep, ClaudeSDKToTrace
+
+skillbook = Skillbook()
+pipe = Pipeline([
+    ClaudeSDKExecuteStep(model="claude-sonnet-4-20250514"),
+    ClaudeSDKToTrace(),
+    *learning_tail(Reflector("gpt-4o-mini"), SkillManager("gpt-4o-mini"), skillbook),
+])
+```
+
+## Shared Features
+
+All runners share these capabilities:
+
+- **Skillbook persistence** — `save()` / load via `skillbook_path`
+- **Checkpointing** — automatic saves during long runs
+- **Deduplication** — prevent duplicate skills
+- **Background learning** — `wait=False` for async learning
+- **Progress tracking** — `learning_stats` property
+
+## Which Integration Should I Use?
+
+- **Building a Q&A or reasoning agent?** Use [ACELiteLLM](litellm.md)
+- **Have an existing LangChain chain or agent?** Use [LangChain](langchain.md)
+- **Automating browser tasks?** Use [BrowserUse](browser-use.md)
+- **Running coding tasks with Claude Code?** Use [ClaudeCode](claude-code.md)
+- **Calling Anthropic directly from your own pipeline?** Use [Claude SDK](claude-sdk.md)
+- **Want to monitor costs and traces?** Add [Opik](opik.md)
+- **Learning from OpenClaw session transcripts?** Use [OpenClaw](openclaw.md)
+- **Exposing ACE as an MCP tool provider?** Use the [MCP Server](mcp.md) and the [MCP Client Setup](mcp-client-setup.md) guide
+- **Want to send traces to Kayba from your code?** Use [Tracing](tracing.md)
+- **Want to use the hosted API instead of running locally?** Use the [Hosted API](hosted-api.md) CLI
+- **Using a different framework?** See the [Integration Guide](../guides/integration.md) to build a custom runner
