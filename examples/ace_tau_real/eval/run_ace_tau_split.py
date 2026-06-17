@@ -75,13 +75,51 @@ def main() -> int:
 def _build_roles(env: dict[str, str], *, mode: str) -> dict[str, Any] | None:
     if mode == "plain":
         return None
-    from ace.implementations import Reflector, SkillManager
+    from ace.implementations import SkillManager
 
     reflector_model = _required_env(env, "AUTOHARNESS_ACE_REFLECTOR_MODEL")
     skill_manager_model = _required_env(env, "AUTOHARNESS_ACE_SKILL_MANAGER_MODEL")
+    reflector_settings = _optional_model_settings(env.get("AUTOHARNESS_ACE_REFLECTOR_LLM_ARGS_JSON"))
+    skill_manager_settings = _optional_model_settings(
+        env.get("AUTOHARNESS_ACE_SKILL_MANAGER_LLM_ARGS_JSON")
+    )
+    reflector_impl = env.get("AUTOHARNESS_ACE_REFLECTOR_IMPL", "simple").strip().lower() or "simple"
+
+    if reflector_impl == "rr":
+        from ace.rr import RRConfig, RRStep
+
+        rr_config = RRConfig(
+            max_iterations=int(env.get("AUTOHARNESS_ACE_RR_MAX_ITERATIONS", "20")),
+            timeout=float(env.get("AUTOHARNESS_ACE_RR_TIMEOUT_SEC", "30.0")),
+            max_llm_calls=int(env.get("AUTOHARNESS_ACE_RR_MAX_LLM_CALLS", "30")),
+            enable_subagent=_env_flag(
+                env.get("AUTOHARNESS_ACE_RR_ENABLE_SUBAGENT"),
+                default=True,
+            ),
+            subagent_model=env.get("AUTOHARNESS_ACE_RR_SUBAGENT_MODEL", "").strip() or None,
+            subagent_max_requests=int(
+                env.get("AUTOHARNESS_ACE_RR_SUBAGENT_MAX_REQUESTS", "15")
+            ),
+        )
+        reflector = RRStep(
+            reflector_model,
+            config=rr_config,
+            model_settings=reflector_settings,
+        )
+    else:
+        from ace.implementations import Reflector
+
+        reflector = Reflector(
+            reflector_model,
+            model_settings=reflector_settings,
+        )
+
     return {
-        "reflector": Reflector(reflector_model),
-        "skill_manager": SkillManager(skill_manager_model),
+        "reflector": reflector,
+        "skill_manager": SkillManager(
+            skill_manager_model,
+            model_settings=skill_manager_settings,
+        ),
     }
 
 
@@ -535,6 +573,26 @@ def _optional_json_dict(value: str | None) -> dict[str, Any] | None:
     if not isinstance(payload, dict):
         raise ValueError("Expected a JSON object.")
     return payload
+
+
+def _optional_model_settings(value: str | None) -> Any | None:
+    payload = _optional_json_dict(value)
+    if payload is None:
+        return None
+    from pydantic_ai.settings import ModelSettings
+
+    return ModelSettings(**payload)
+
+
+def _env_flag(value: str | None, *, default: bool) -> bool:
+    if value in (None, ""):
+        return default
+    normalized = value.strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+    raise ValueError(f"Expected boolean environment flag, got: {value!r}")
 
 
 def _required_env(env: dict[str, str], key: str) -> str:

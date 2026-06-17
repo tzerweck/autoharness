@@ -1,0 +1,363 @@
+[experiment]
+name = "ace-tau-real-airline-bedrock-rr-official-train-test"
+workspace_root = "../../agentic-context-engine-22-04"
+stack = "python"
+max_iterations = 8
+
+[proposer]
+backend = "command"
+max_turns = 50
+command = ["your-agent-cli", "run"]
+
+[runner]
+kind = "script"
+
+[runner.env]
+AUTOHARNESS_TAU2_ROOT = "../../tau2-bench"
+AUTOHARNESS_ACE_DOMAIN = "airline"
+AUTOHARNESS_ACE_AGENT_MODEL = "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0"
+AUTOHARNESS_ACE_USER_MODEL = "gpt-4.1-2025-04-14"
+AUTOHARNESS_ACE_REFLECTOR_MODEL = "bedrock/us.anthropic.claude-sonnet-4-6"
+AUTOHARNESS_ACE_SKILL_MANAGER_MODEL = "bedrock/us.anthropic.claude-sonnet-4-6"
+AUTOHARNESS_ACE_REFLECTOR_IMPL = "rr"
+AUTOHARNESS_ACE_RR_ENABLE_SUBAGENT = "true"
+AUTOHARNESS_ACE_RR_SUBAGENT_MODEL = "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0"
+AUTOHARNESS_ACE_AGENT_LLM_ARGS_JSON = '{"temperature": 0.0}'
+AUTOHARNESS_ACE_USER_LLM_ARGS_JSON = '{"temperature": 0.0}'
+AUTOHARNESS_ACE_REFLECTOR_LLM_ARGS_JSON = '{"temperature": 0.0}'
+AUTOHARNESS_ACE_SKILL_MANAGER_LLM_ARGS_JSON = '{"temperature": 0.0}'
+
+[runner.script]
+command = [".venv/bin/python", "../examples/ace_tau_real/eval/run_with_ace_python.py", "../examples/ace_tau_real/eval/run_ace_tau_split.py"]
+result_json_path = "result.json"
+
+[policy]
+primary_metric = "mean_score"
+holdout_every = 2
+require_holdout_for_promotion = true
+prefer_simpler_on_tie = true
+min_primary_improvement = 0.05
+max_allowed_holdout_regression = 0.0
+guardrail_case_ids_file = "eval/policy_guardrail_task_ids.txt"
+max_allowed_guardrail_regressions = 0
+
+[validation]
+kind = "script"
+script = [".venv/bin/python", "../examples/ace_tau_real/eval/run_with_ace_python.py", "../examples/ace_tau_real/eval/validate_ace_workspace.py"]
+timeout_sec = 60.0
+
+[context]
+history_strategy = "recent_plus_best"
+max_candidates = 8
+include_diffs = true
+include_train_traces = true
+include_holdout_details = false
+
+[reporting]
+emit_markdown = true
+emit_json = true
+
+[surfaces.ace_code]
+kind = "workspace_tree"
+target = "ace"
+base_dir = "ace"
+
+[[cases]]
+id = "train.airline_0000"
+runner_ref = "tau2.airline.task.0"
+split = "train"
+metadata = { task_id = "0", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0001"
+runner_ref = "tau2.airline.task.1"
+split = "train"
+metadata = { task_id = "1", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0003"
+runner_ref = "tau2.airline.task.3"
+split = "train"
+metadata = { task_id = "3", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0004"
+runner_ref = "tau2.airline.task.4"
+split = "train"
+metadata = { task_id = "4", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0005"
+runner_ref = "tau2.airline.task.5"
+split = "train"
+metadata = { task_id = "5", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0007"
+runner_ref = "tau2.airline.task.7"
+split = "train"
+metadata = { task_id = "7", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0009"
+runner_ref = "tau2.airline.task.9"
+split = "train"
+metadata = { task_id = "9", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0010"
+runner_ref = "tau2.airline.task.10"
+split = "train"
+metadata = { task_id = "10", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0011"
+runner_ref = "tau2.airline.task.11"
+split = "train"
+metadata = { task_id = "11", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0012"
+runner_ref = "tau2.airline.task.12"
+split = "train"
+metadata = { task_id = "12", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0014"
+runner_ref = "tau2.airline.task.14"
+split = "train"
+metadata = { task_id = "14", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0015"
+runner_ref = "tau2.airline.task.15"
+split = "train"
+metadata = { task_id = "15", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0017"
+runner_ref = "tau2.airline.task.17"
+split = "train"
+metadata = { task_id = "17", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0020"
+runner_ref = "tau2.airline.task.20"
+split = "train"
+metadata = { task_id = "20", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0021"
+runner_ref = "tau2.airline.task.21"
+split = "train"
+metadata = { task_id = "21", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0023"
+runner_ref = "tau2.airline.task.23"
+split = "train"
+metadata = { task_id = "23", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0027"
+runner_ref = "tau2.airline.task.27"
+split = "train"
+metadata = { task_id = "27", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0028"
+runner_ref = "tau2.airline.task.28"
+split = "train"
+metadata = { task_id = "28", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0033"
+runner_ref = "tau2.airline.task.33"
+split = "train"
+metadata = { task_id = "33", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0034"
+runner_ref = "tau2.airline.task.34"
+split = "train"
+metadata = { task_id = "34", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0036"
+runner_ref = "tau2.airline.task.36"
+split = "train"
+metadata = { task_id = "36", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0038"
+runner_ref = "tau2.airline.task.38"
+split = "train"
+metadata = { task_id = "38", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0039"
+runner_ref = "tau2.airline.task.39"
+split = "train"
+metadata = { task_id = "39", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0040"
+runner_ref = "tau2.airline.task.40"
+split = "train"
+metadata = { task_id = "40", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0041"
+runner_ref = "tau2.airline.task.41"
+split = "train"
+metadata = { task_id = "41", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0042"
+runner_ref = "tau2.airline.task.42"
+split = "train"
+metadata = { task_id = "42", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0043"
+runner_ref = "tau2.airline.task.43"
+split = "train"
+metadata = { task_id = "43", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0046"
+runner_ref = "tau2.airline.task.46"
+split = "train"
+metadata = { task_id = "46", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0047"
+runner_ref = "tau2.airline.task.47"
+split = "train"
+metadata = { task_id = "47", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "train.airline_0049"
+runner_ref = "tau2.airline.task.49"
+split = "train"
+metadata = { task_id = "49", num_trials = 1, manifest = "eval/official_train_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0002"
+runner_ref = "tau2.airline.task.2"
+split = "holdout"
+metadata = { task_id = "2", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0006"
+runner_ref = "tau2.airline.task.6"
+split = "holdout"
+metadata = { task_id = "6", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0008"
+runner_ref = "tau2.airline.task.8"
+split = "holdout"
+metadata = { task_id = "8", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0013"
+runner_ref = "tau2.airline.task.13"
+split = "holdout"
+metadata = { task_id = "13", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0016"
+runner_ref = "tau2.airline.task.16"
+split = "holdout"
+metadata = { task_id = "16", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0018"
+runner_ref = "tau2.airline.task.18"
+split = "holdout"
+metadata = { task_id = "18", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0019"
+runner_ref = "tau2.airline.task.19"
+split = "holdout"
+metadata = { task_id = "19", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0022"
+runner_ref = "tau2.airline.task.22"
+split = "holdout"
+metadata = { task_id = "22", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0024"
+runner_ref = "tau2.airline.task.24"
+split = "holdout"
+metadata = { task_id = "24", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0025"
+runner_ref = "tau2.airline.task.25"
+split = "holdout"
+metadata = { task_id = "25", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0026"
+runner_ref = "tau2.airline.task.26"
+split = "holdout"
+metadata = { task_id = "26", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0029"
+runner_ref = "tau2.airline.task.29"
+split = "holdout"
+metadata = { task_id = "29", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0030"
+runner_ref = "tau2.airline.task.30"
+split = "holdout"
+metadata = { task_id = "30", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0031"
+runner_ref = "tau2.airline.task.31"
+split = "holdout"
+metadata = { task_id = "31", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0032"
+runner_ref = "tau2.airline.task.32"
+split = "holdout"
+metadata = { task_id = "32", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0035"
+runner_ref = "tau2.airline.task.35"
+split = "holdout"
+metadata = { task_id = "35", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0037"
+runner_ref = "tau2.airline.task.37"
+split = "holdout"
+metadata = { task_id = "37", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0044"
+runner_ref = "tau2.airline.task.44"
+split = "holdout"
+metadata = { task_id = "44", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0045"
+runner_ref = "tau2.airline.task.45"
+split = "holdout"
+metadata = { task_id = "45", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }
+
+[[cases]]
+id = "holdout.airline_0048"
+runner_ref = "tau2.airline.task.48"
+split = "holdout"
+metadata = { task_id = "48", num_trials = 2, manifest = "eval/official_test_task_ids.txt" }

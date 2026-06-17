@@ -20,7 +20,7 @@ uv pip install --python "${ACE_ROOT}/.venv/bin/python" \
   "click>=8.1.0" \
   "litellm>=1.83.0" \
   "pydantic>=2.0.0" \
-  "pydantic-ai-slim[litellm]>=0.0.36" \
+  "pydantic-ai-slim[litellm,bedrock]>=0.0.36" \
   "python-toon>=0.1.0" \
   "tenacity>=9.1.4" \
   "python-dotenv>=1.0.0" \
